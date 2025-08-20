@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starship Multiview</title>
+<style>
+body {
+  background: radial-gradient(circle at center, #000010, #000000);
+  color: #00ffea;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Multiview Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 20px;
+}
+.cell {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #00ffea;
+  border-radius: 15px;
+}
+.cell iframe {
+  width: 100%;
+  height: 250px;
+  border: none;
+  border-radius: 15px;
+}
+.overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 0 0 5px #00ffea, 0 0 10px #00ffea55;
+}
+
+/* Single View */
+#singleView {
+  display: none;
+  position: relative;
+  padding: 20px;
+  text-align: center;
+}
+#singleIframe {
+  width: 80%;
+  height: 500px;
+  border: none;
+  border-radius: 15px;
+}
+#singleOverlay {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffea;
+  text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea55;
+  pointer-events: none;
+  background: none;
+}
+
+/* Buttons */
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #00ffea;
+  background: transparent;
+  border: 2px solid #00ffea;
+  border-radius: 10px;
+  cursor: pointer;
+}
+button:hover {
+  background: #00ffea11;
+}
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center;">Starship Multiview</h1>
+
+<!-- Multiview Grid -->
+<div class="grid" id="multiview">
+  <div class="cell"><iframe src="https://www.youtube.com/embed/jbZZYZXB1ZY?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Rover Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/Dr3g-1r9BbI?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Saphire Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/oOj_x6H74mA?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Nerdle Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/BY3XhbTfors?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Lab Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/qw3uaLRrYNY?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Rocket Ranch Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/IQV0DlS1Ew0?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Sentinel Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/tS2PHJmvJzo?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">Rover 2.0 Cam</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/mhJRzQsLZGg?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">NASA Spaceflight Live</div></div>
+  <div class="cell"><iframe src="https://www.youtube.com/embed/cOmmvhDQ2HM?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0" allowfullscreen></iframe><div class="overlay">McGregor Test Site</div></div>
+</div>
+
+<!-- Single View -->
+<div id="singleView">
+  <iframe id="singleIframe" src="" allowfullscreen></iframe>
+  <div class="overlay" id="singleOverlay"></div>
+  <div>
+    <button onclick="prevStream()">Previous</button>
+    <button onclick="nextStream()">Next</button>
+    <button onclick="showAll()">Show All</button>
+  </div>
+</div>
+
+<!-- Controls -->
+<div style="text-align:center;">
+  <button onclick="showAll()">Multiview</button>
+  <button onclick="showSingle()">Single View</button>
+</div>
+
+<script>
+const streams = [
+  {src: "https://www.youtube.com/embed/jbZZYZXB1ZY?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Rover Cam"},
+  {src: "https://www.youtube.com/embed/Dr3g-1r9BbI?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Saphire Cam"},
+  {src: "https://www.youtube.com/embed/oOj_x6H74mA?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Nerdle Cam"},
+  {src: "https://www.youtube.com/embed/BY3XhbTfors?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Lab Cam"},
+  {src: "https://www.youtube.com/embed/qw3uaLRrYNY?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Rocket Ranch Cam"},
+  {src: "https://www.youtube.com/embed/IQV0DlS1Ew0?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Sentinel Cam"},
+  {src: "https://www.youtube.com/embed/tS2PHJmvJzo?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "Rover 2.0 Cam"},
+  {src: "https://www.youtube.com/embed/mhJRzQsLZGg?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "NASA Spaceflight Live"},
+  {src: "https://www.youtube.com/embed/cOmmvhDQ2HM?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0", label: "McGregor Test Site"}
+];
+
+let currentIndex = 0;
+
+function showAll() {
+  document.getElementById('multiview').style.display = 'grid';
+  document.getElementById('singleView').style.display = 'none';
+}
+
+function showSingle() {
+  document.getElementById('multiview').style.display = 'none';
+  document.getElementById('singleView').style.display = 'block';
+  loadStream(currentIndex);
+}
+
+function loadStream(index) {
+  const iframe = document.getElementById('singleIframe');
+  const overlay = document.getElementById('singleOverlay');
+  iframe.src = streams[index].src;
+  overlay.textContent = streams[index].label;
+}
+
+function nextStream() {
+  currentIndex = (currentIndex + 1) % streams.length;
+  if(document.getElementById('singleView').style.display === 'block') loadStream(currentIndex);
+}
+
+function prevStream() {
+  currentIndex = (currentIndex - 1 + streams.length) % streams.length;
+  if(document.getElementById('singleView').style.display === 'block') loadStream(currentIndex);
+}
+</script>
+
+</body>
+</html>
